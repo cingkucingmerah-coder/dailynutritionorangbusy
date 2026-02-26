@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dailynutritionorangbusy</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#1e1b2e,#2b2344);
+  color:white;
+  height:100vh;
+}
+
+/* PAGE SYSTEM */
+.page{
+  display:none;
+  width:100%;
+  height:100vh;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.page.active{
+  display:flex;
+}
+
+/* BUTTON */
+button{
+  padding:14px 28px;
+  border:none;
+  border-radius:40px;
+  font-size:16px;
+  cursor:pointer;
+  margin:10px;
+}
+
+#tiredBtn{
+  background:#c8a2ff;
+  color:white;
+}
+
+#notTiredBtn{
+  background:#ff8fb1;
+  color:white;
+  position:absolute;
+}
+
+/* LETTER */
+#letterText{
+  max-width:650px;
+  line-height:1.8;
+  white-space:pre-line;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <h1>Mas Farhan…</h1>
+  <p>Kamu capek?</p>
+  <button id="tiredBtn">Capek</button>
+  <button id="notTiredBtn">Enggak capek</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <h1>Untuk Mas Farhan</h1>
+  <p id="letterText"></p>
+</div>
+
+<audio id="bgm" src="tulus-diri.mp3" loop></audio>
+
+<script>
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const tiredBtn = document.getElementById("tiredBtn");
+const notTiredBtn = document.getElementById("notTiredBtn");
+const letterText = document.getElementById("letterText");
+const bgm = document.getElementById("bgm");
+
+/* TOMBOL KABUR */
+function moveButton(){
+  const x = Math.random() * (window.innerWidth - 150);
+  const y = Math.random() * (window.innerHeight - 80);
+  notTiredBtn.style.left = x + "px";
+  notTiredBtn.style.top = y + "px";
+}
+
+notTiredBtn.addEventListener("mouseenter", moveButton);
+
+/* FADE MUSIC */
+function fadeInAudio(audio, duration = 4000){
+  audio.volume = 0;
+  audio.play().catch(()=>{});
+  let step = 0.02;
+  let interval = duration * step;
+  let fade = setInterval(()=>{
+    if(audio.volume < 0.6){
+      audio.volume += step;
+    } else {
+      clearInterval(fade);
+    }
+  }, interval);
+}
+
+/* PINDAH PAGE */
+tiredBtn.addEventListener("click", ()=>{
+  page1.classList.remove("active");
+  page2.classList.add("active");
+  fadeInAudio(bgm, 4000);
+  startTyping();
+});
+
+/* TYPING */
+function startTyping(){
+const text = `Mas,
+
+Terima kasih sudah jujur memilih capek.
+
+Aku tahu kamu sering mencoba terlihat kuat.
+Sering bilang semuanya aman.
+Padahal mungkin tidak selalu begitu.
+
+Kamu tidak harus selalu baik-baik saja.
+Kamu tidak harus selalu tegar.
+
+Kalau kamu lelah, itu wajar.
+Kalau kamu merasa berat, itu manusiawi.
+
+Aku lihat kamu berusaha.
+Aku lihat kamu bertahan.
+Dan itu lebih dari cukup.
+
+Mas Farhan,
+kamu berharga bukan karena seberapa kuat kamu,
+tapi karena siapa kamu.
+
+Kalau kamu capek,
+aku di sini.`;
+
+  letterText.innerHTML = "";
+  let i = 0;
+  function type(){
+    if(i < text.length){
+      letterText.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 25);
+    }
+  }
+  type();
+}
+</script>
+
+</body>
+</html>
